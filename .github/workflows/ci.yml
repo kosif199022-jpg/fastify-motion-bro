@@ -50,8 +50,21 @@ jobs:
           PY
       - name: Render native animated smoke frame sequence
         run: |
-          python scripts/render.py --smoke --seconds 1 --height 360 --fps 6 --output output/editorial-smoke.mp4
+          python scripts/render.py --smoke --seconds 7 --height 360 --fps 6 --output output/editorial-smoke.mp4
           python scripts/qa.py output/editorial-smoke.mp4
+      - name: Prove temporal change in entrance, hold, exit and transition
+        run: |
+          python - <<'PY'
+          import subprocess,hashlib
+          path='output/editorial-smoke.mp4'
+          samples=[]
+          for t in (0.8, 3.8, 5.4, 6.5):
+            p=subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-ss',str(t),'-i',path,'-frames:v','1','-f','image2pipe','-vcodec','png','pipe:1'],capture_output=True,check=True)
+            assert p.stdout, 'Missing sample frame at '+str(t)
+            samples.append(hashlib.sha256(p.stdout).hexdigest())
+          assert len(set(samples))==4, 'No meaningful temporal frame differences'
+          print('4 different frame samples verified across 6 second scene and next scene start')
+          PY
       - name: Upload rendered smoke and QA receipt
         if: always()
         uses: actions/upload-artifact@v4
