@@ -65,8 +65,30 @@ def main():
             assert not errors, 'Browser JS errors: ' + ' | '.join(errors)
             assert result['withCaptions'] != result['withoutCaptions'], (
                 'Caption overlay did not change the frame pixels')
+            # Also verify the optional keyframed native hero moves in a real browser.
+            # Temporarily select generic native mode on the same fixture; Viral Editorial
+            # uses a separate renderer and must remain untouched in the repository.
+            keyed = page.evaluate("""() => {
+              const s=window.__FMB_STORYBOARD__,first=s.scenes[0],c=document.querySelector('#stage');
+              const oldProfile=s.profile,oldCaptions=s.captions,oldMotion=first.motion;
+              function digest(){
+                const data=c.getContext('2d').getImageData(0,0,c.width,Math.floor(c.height*.58)).data;
+                let hash=2166136261;
+                for(let i=0;i<data.length;i+=8)hash=Math.imul(hash^data[i],16777619)>>>0;
+                return hash;
+              }
+              s.profile='generic';s.captions=[];
+              first.motion={tracks:{x:[{time:0,value:-.25},{time:2,value:.25}]}};
+              window.renderFrame(1);const withKeyframes=digest();
+              if(oldMotion===undefined)delete first.motion;else first.motion=oldMotion;
+              window.renderFrame(1);const withoutKeyframes=digest();
+              s.profile=oldProfile;s.captions=oldCaptions;
+              return {withKeyframes,withoutKeyframes};
+            }""")
+            assert keyed['withKeyframes'] != keyed['withoutKeyframes'], (
+                'Native keyframe motion did not change real Canvas pixels')
             print(json.dumps({'ok': True, 'test': 'caption-overlaid-and-visible',
-                              **result, 'human_typography_review': 'NOT_DONE'}, ensure_ascii=False))
+                              **result, **keyed, 'human_typography_review': 'NOT_DONE'}, ensure_ascii=False))
         finally:
             browser.close()
 
