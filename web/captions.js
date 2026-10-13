@@ -1,5 +1,5 @@
 /** Animated on-canvas caption overlay shared by local preview and Chromium render. */
-import {cueAt} from '../scripts/captions-core.mjs';
+import {cueAt} from './captions-core.js';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 function wrap(ctx,text,maxWidth) {
  const words=String(text).replace(/\s+/g,' ').trim().split(' ');
