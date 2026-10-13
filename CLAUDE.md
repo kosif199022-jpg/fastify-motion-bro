@@ -7,3 +7,5 @@ When the user wants application improvements, new technical powers, brainstormin
 Use `npm run ideas -- list`, `npm run ideas -- search arabic`, `npm run ideas -- show MB-001`, `npm run ideas -- handoff MB-001`.
 For a bare "start" show the existing 9 production modes FIRST; the idea catalog is a development capability and does not replace video mode selection.
 Use feature branches, verify test results, and clearly distinguish running providers from proposed integrations. Never report unconnected Flow/Veo as generating video.
+
+When a user requests editable animation timing, inspect `docs/MOTION_TIMELINE.md` and use tested `web/timeline.js` keyframes for native scenes; don't claim a visual timeline editor exists. Preserve scene-level start-relative keyframes and explicit final-render approval.
