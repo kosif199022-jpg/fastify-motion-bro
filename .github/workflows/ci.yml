@@ -23,6 +23,8 @@ jobs:
           python-version: '3.12'
       - name: Install media dependencies
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
           python -m pip install -r requirements-render.txt
           python -m playwright install --with-deps chromium
           ffmpeg -version
@@ -50,3 +52,13 @@ jobs:
         run: |
           python scripts/render.py --smoke --seconds 1 --height 360 --fps 6 --output output/editorial-smoke.mp4
           python scripts/qa.py output/editorial-smoke.mp4
+      - name: Upload rendered smoke and QA receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: editorial-motion-smoke
+          path: |
+            output/editorial-smoke.mp4
+            output/qa_report.json
+          if-no-files-found: warn
+          retention-days: 7
