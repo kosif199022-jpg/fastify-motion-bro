@@ -43,3 +43,19 @@ test('Canvas overlay draws multiple pages without mutating original source',()=>
  assert.equal(cues[0].text,text);
  assert(!drawCaptionOverlay(canvas,cues,9.1));
 });
+
+test('caption top/center/bottom placement obeys adjustable safe area',()=>{
+ let ys=[];
+ const ctx={
+  save(){},restore(){},beginPath(){},roundRect(x,y,w,h){ys.push({y,h});},
+  fill(){},fillText(){},measureText(s){return {width:measure(s)};},
+ };
+ const canvas={width:540,height:960,getContext(){return ctx;}};
+ const cues=[{start:0,end:3,text:'عنوان واضح'}];
+ assert(drawCaptionOverlay(canvas,cues,1,{placement:'top'}));
+ assert(drawCaptionOverlay(canvas,cues,1,{placement:'center'}));
+ assert(drawCaptionOverlay(canvas,cues,1,{placement:'bottom'}));
+ assert(ys[0].y<ys[1].y && ys[1].y<ys[2].y);
+ assert(drawCaptionOverlay(canvas,cues,1,{placement:'bottom',offsetY:10}));
+ assert(ys[3].y>=0 && ys[3].y+ys[3].h<=canvas.height*.931);
+});
