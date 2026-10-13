@@ -7,7 +7,10 @@ function draw(t){
  if(!story)return;
  seconds=Math.max(0,Math.min(story.duration_seconds,t));
  if(story.profile==='viral-editorial-3d')drawEditorialFrame(canvas,story,seconds);else drawFrame(canvas,story,seconds);
- if(Array.isArray(story.captions) && story.captions.length) drawCaptionOverlay(canvas,story.captions,seconds);
+ if(Array.isArray(story.captions) && story.captions.length){
+  const activeScene=story.scenes.find(s=>seconds>=s.start&&seconds<s.end)||story.scenes.at(-1);
+  drawCaptionOverlay(canvas,story.captions,seconds,activeScene?.caption_layout||story.caption_layout||{});
+ }
  seek.value=Math.round(seconds/story.duration_seconds*1000);
  time.value=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(Math.floor(seconds%60)).padStart(2,'0');
  const active=story.scenes.find(s=>seconds>=s.start&&seconds<s.end)?.id||story.scenes.at(-1)?.id;
