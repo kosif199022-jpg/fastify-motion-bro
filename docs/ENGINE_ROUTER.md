@@ -8,3 +8,5 @@
 Choose based on availability and goals. Before switching a chosen engine, explain tradeoffs. No vendor code copied into this repository.
 
 - Opt-in Viral Editorial 3D: read docs/VIRAL-EDITORIAL-DNA.md. Native original 2.5D vector renderer under web/editorial.js. No attached photoreal model generator.
+
+- Prompt-only production profiles for Google Flow (not connected): see docs/PROFILE_CATALOG.md. Invoke npm run profile -- list.
