@@ -75,3 +75,32 @@ jobs:
             output/qa_report.json
           if-no-files-found: warn
           retention-days: 7
+
+      - name: Verify imported Arabic SRT affects actual Chromium canvas and MP4
+        run: |
+          cat > /tmp/fmb-caption-fixture.srt <<'SRT'
+          1
+          00:00:00,000 --> 00:00:03,000
+          هذا اختبار حقيقي للكابشن العربي
+          مع حركة وتوقيت دقيق داخل الفيديو
+
+          2
+          00:00:03,100 --> 00:00:05,500
+          العبارات الطويلة تظهر على صفحات متتابعة
+          ولا تُحذف أي كلمات أصلية من المحتوى
+          SRT
+          npm run captions -- check /tmp/fmb-caption-fixture.srt
+          npm run captions -- attach /tmp/fmb-caption-fixture.srt project/storyboard.json
+          python scripts/qa_caption_overlay.py
+          python scripts/render.py --smoke --seconds 3 --height 360 --fps 6 --output output/caption-smoke.mp4
+          python scripts/qa.py output/caption-smoke.mp4
+      - name: Upload caption video and technical QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arabic-captions-smoke
+          path: |
+            output/caption-smoke.mp4
+            output/qa_report.json
+          if-no-files-found: warn
+          retention-days: 7
