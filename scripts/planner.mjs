@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
-export const ROOT = resolve(new URL('../', import.meta.url).pathname);
+import { pathToFileURL, fileURLToPath } from 'node:url';
+export const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const defaultBrief = {title:'Fastify Motion Bro',topic:'جمال الحركة',duration_seconds:30,aspect:'9:16',style:'kinetic',language:'ar',voiceover:'none'};
 export function normalizeBrief(input={}) {
   const b = {...defaultBrief,...input};
