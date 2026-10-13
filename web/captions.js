@@ -50,7 +50,7 @@ export function selectCaptionPage(cue,pages,t) {
  return pages.length-1;
 }
 
-export function drawCaptionOverlay(canvas,cues,t) {
+export function drawCaptionOverlay(canvas,cues,t,layout={}) {
  const cue=cueAt(cues,t);
  if(!cue)return false;
  const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height,vertical=h>w;
@@ -66,7 +66,11 @@ export function drawCaptionOverlay(canvas,cues,t) {
  const lines=pages[pageIndex];
  const lineHeight=font*1.3,boxH=lines.length*lineHeight+font*.9;
  // Keep the entire box inside the lower safe region, including landscape format.
- const x=w*.06,bw=w*.88,y=Math.min(h*(vertical?.805:.78),h*.93-boxH);
+ const x=w*.06,bw=w*.88;
+ const placement=['top','center','bottom'].includes(layout?.placement)?layout.placement:'bottom';
+ const offset=Number.isFinite(layout?.offsetY)?clamp(layout.offsetY,-.2,.2):0;
+ const targetY=(placement==='top'?h*.11:placement==='center'?h*.45:h*(vertical?.805:.78))+offset*h;
+ const y=clamp(targetY,h*.07,Math.max(h*.07,h*.93-boxH));
  // Page changes have a subtle temporal opacity ramp, but no original words vanish.
  const fade=Math.min(.12,(cue.end-cue.start)/8);
  const alpha=fade>0?clamp((t-cue.start)/fade,0,1)*clamp((cue.end-t)/fade,0,1):1;
