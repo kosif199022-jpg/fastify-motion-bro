@@ -9,3 +9,5 @@ For a bare "start" show the existing 9 production modes FIRST; the idea catalog 
 Use feature branches, verify test results, and clearly distinguish running providers from proposed integrations. Never report unconnected Flow/Veo as generating video.
 
 When a user requests editable animation timing, inspect `docs/MOTION_TIMELINE.md` and use tested `web/timeline.js` keyframes for native scenes; don't claim a visual timeline editor exists. Preserve scene-level start-relative keyframes and explicit final-render approval.
+
+Before delivering Arabic SRT captions, read `docs/CAPTION_LAYOUT.md` and inspect actual frames. Choose per-scene caption_layout placement to avoid branded titles; CI proves pixels change, not that underlying text is unobscured. Do not silently omit long cue words.
