@@ -12,6 +12,21 @@ const ACTIONS={
  'candy':[['placing a wrapped piece of candy','plastic wrapper tap'],['unwrapping the candy','crinkling cellophane and foil'],['revealing the candy center','soft wrapper tear'],['arranging three pieces side by side','small hard candy clicks'],['tilting finished candy toward camera','gentle candy contact']],
  'fries':[['laying out raw potatoes','firm potatoes meeting board'],['cutting a potato into even sticks','sharp knife through crisp potato and chopping board taps'],['lightly shaking seasoning over safely cooked fries','fine seasoning patter'],['stacking hot fries in a serving cone','light crispy contacts and paper crinkle'],['adding final salt and parsley','tiny flakes falling onto hot surface']]
 };
+
+// Additional physically distinct assembly sequences for the full menu.
+Object.assign(ACTIONS,{
+ 'fried chicken':[['placing seasoned raw chicken into a food-safe preparation tray','light tray contact'],['coating each piece in seasoned flour','dry flour patter and light coating brushes'],['placing coated pieces carefully into hot oil with proper splash safety','authentic rising frying sizzle and delicate popping'],['lifting safely cooked pieces with tongs to drain','oil drip and metal tong clicks'],['placing golden crisp chicken on a plate','crisp breading taps and plate contact']],
+ 'hot dog':[['placing the warm bun in a tray','soft bread contact'],['placing a cooked hot dog sausage into the bun','gentle sausage-to-bread thud'],['adding mustard in one zigzag pass','fine bottle squeeze and soft sauce contact'],['sprinkling diced onion','small crisp onion taps'],['finishing with a careful presentation turn','paper tray crinkle']],
+ 'sandwich / sub':[['laying open sliced sub bread','soft crust brushing counter'],['spreading the chosen condiment on both halves','wet spread and knife scrape'],['layering sliced prepared filling','soft stacked ingredient contact'],['adding tomato and lettuce','crisp lettuce rustle and tomato slice taps'],['folding and presenting the assembled sandwich','bread compression and wrapper rustle']],
+ 'nachos':[['laying crisp corn chips in a shallow dish','dry tortilla-chip clatter'],['spooning warmed beans onto the chips','soft bean spoon scrape'],['drizzling cheese sauce','thick molten cheese pour'],['adding diced salsa and jalapeno','crisp vegetable patter'],['finishing with a tiny garnish','soft leafy rustling']],
+ 'noodles / ramen':[['placing cooked noodles inside a deep ceramic bowl','soft strands against ceramic'],['arranging prepared vegetables and toppings','light topping placement taps'],['pouring hot broth carefully around noodles','gentle liquid stream and ceramic resonance'],['placing a final garnish over the surface','wet leaf touch and subtle surface ripple'],['moving the finished ramen bowl into serving position','ceramic slide and gentle broth sway']],
+ 'sushi roll':[['spreading seasoned rice across a nori sheet','sticky rice pressing and faint seaweed crackle'],['arranging prepared safe fillings evenly','gentle crisp cut vegetable taps'],['rolling the nori and rice using a bamboo mat','dry mat rustle and soft rice compression'],['slicing the completed roll cleanly','sharp blade cut and quiet board contacts'],['arranging each slice on a plate','light ceramic taps']],
+ 'ice cream sundae':[['setting a chilled serving bowl','clean ceramic clink'],['placing one scoop of frozen ice cream','scoop scraping frozen surface'],['adding a second scoop in the bowl','soft frozen scoop contact'],['pouring a thin dessert sauce','smooth viscous drizzle'],['placing a small crunchy topping','fine crumble patter']],
+ 'chocolate cake / cupcake':[['placing the baked cooled cake on a plate','soft sponge against ceramic'],['smoothing frosting with an offset spatula','creamy blade scrape'],['adding a thin chocolate ribbon','viscous slow chocolate drizzle'],['sprinkling a small decorative topping','tiny sprinkle taps'],['presenting one clean cut or cupcake closeup','light plate contact']],
+ 'iced coffee / latte':[['setting a clear glass on the preparation surface','hollow glass tap'],['dropping chilled ice into the glass','hard ice-on-glass clatter'],['pouring coffee over the ice','dark liquid stream with rising splashing pitch'],['adding cold milk in a steady ribbon','lighter liquid swirls and quiet pour'],['gently turning the glass to show the layered drink','subtle ice clink']],
+ 'smoothie':[['placing a chilled glass on the counter','gentle thick glass clink'],['pouring a freshly blended fruit smoothie','heavy smooth viscous liquid stream'],['tapping the glass once to settle the contents','brief glass tap'],['adding a small fruit garnish','soft fruit-on-glass tap'],['presenting the completed drink with a reusable straw','light straw glass click']]
+});
+
 const chef='Same adult chef with medium-brown hands, rolled ivory chef sleeves, charcoal apron without logos and a slim plain silver wristband; face outside frame until the final tasting shot. The same chef appears in ALL clips.';
 const set='Same intimate contemporary kitchen: pale warm stone countertop, matte ceramic serving plate, defocused oak cabinets and copper lamp behind, golden soft overhead practical light with left softbox and gentle countertop shadows.';
 const camera='Same 45-degree three-quarter medium food close-up, 50mm lens look, shallow depth of field, fixed tripod with only tiny motivated macro pushes.';
@@ -31,9 +46,18 @@ const SFX_EAT={
 function pickStages(food,n){
  const normalized=food.toLowerCase();
  let data=ACTIONS[normalized];
- if(!data){const drink=/juice|coffee|tea|drink|smoothie|shake|latte|water|soda/i.test(food);
-  const sweet=/cake|pie|cookie|ice cream|dessert|candy|chocolate/i.test(food);
-  data=drink?ACTIONS['fresh juice']:sweet?ACTIONS.donuts:ACTIONS.burger;
+ if(!data){
+  const alias=Object.keys(ACTIONS).find(key=>normalized.includes(key)||key.includes(normalized));
+  if(alias)data=ACTIONS[alias];
+  else{
+   const drink=/juice|coffee|tea|drink|smoothie|shake|latte|water|soda|milk/i.test(food);
+   const sweet=/cake|pie|cookie|ice cream|dessert|candy|chocolate|pastry/i.test(food);
+   data=drink?
+    [['presenting a clean suitable serving glass for '+food,'glass meeting counter'],['adding the first suitable ingredient of '+food,'light ingredient contact'],['pouring the prepared '+food+' at an appropriate viscosity','authentic liquid stream and glass splash'],['adding a complementary garnish','light garnish patter'],['rotating the completed drink toward the lens','soft glass movement']]:
+    sweet?
+    [['placing the prepared base of '+food+' on a serving plate','soft prepared base touching ceramic'],['layering one appropriate component of '+food,'texture-matched gentle ingredient contact'],['adding a visually distinct finishing layer','soft frosting or garnish spreading'],['showing a close macro detail of the finished dessert','quiet plate adjustment'],['positioning the finished dessert to serve','ceramic tap']]:
+    [['placing a prepared main base of '+food+' on the work surface','material-appropriate board contact'],['adding one prepared primary ingredient','specific ingredient tap/scrape'],['assembling the next distinct component of '+food,'natural physical ingredient handling'],['applying a finishing sauce or seasoning only if appropriate','subtle sauce or seasoning sounds'],['plating the completed '+food,'ceramic contact and utensil set-down']];
+  }
  }
  const assembly=Math.max(0,n-1),out=[];
  if(assembly===0)return out;
