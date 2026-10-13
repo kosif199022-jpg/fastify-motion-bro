@@ -143,3 +143,30 @@ npm test
 للاستخدام مع Codex أو Claude: أعطه الرابط واطلب فيديو، ثم اختر النوع، وسيقرأ AGENTS.md والمهارة الخاصة بالنوع. مرجع كل وضع: docs/PROFILE_CATALOG.md.
 
 ملاحظة: الأنظمة السبعة تنتج ملفات Prompts وخطة JSON، وليست خدمات Flow/Veo متصلة. لا توجد صور أو فيديوهات مولّدة تلقائياً من هذه التعليمات. يجب توصيل أدوات التوليد والموافقة على تكلفة استخدامها منفصلًا، ويجب فحص تهجئة النصوص العربية والإنجليزية في المقاطع الناتجة.
+
+
+## 🧪 Motion Lab v0.4 — 500 technical proposals + real caption workflow
+
+**500 documented proposals are not 500 implemented features or 500 independent expert submissions.** The curated proposals are preserved without creative Jev ranking at `docs/MOTION_LAB_500.md`, indexed at `data/motion-ideas-500.json`. KOSIF Think role consultations were used as context, but their responses did not contain 500 separate concrete ideas. Human approval and security gates remain unchanged.
+
+```bash
+npm run ideas -- validate             # prove registry has 500 distinct IDs in 20 categories
+npm run ideas -- list                 # browse domains
+npm run ideas -- search Arabic 10     # find matching suggestions
+npm run ideas -- category "Motion Physics"
+npm run ideas -- show MB-076          # get a full proposal JSON
+npm run ideas -- handoff MB-076       # copy a guarded engineering brief into Claude Code
+```
+
+**Actually implemented:** optional SRT subtitle parsing and time-driven RTL overlay on the existing Native Canvas playback/render path. This adds NO video generation provider and does NOT imply speech-to-text or word-level forced alignment.
+
+```bash
+npm run captions -- check my-script.srt
+npm run captions -- export my-script.srt project/captions.json
+npm run captions -- attach my-script.srt project/storyboard.json
+npm run preview
+npm test
+```
+
+`attach` explicitly modifies `project/storyboard.json` and writes a timestamped backup; `check` and `export` do not alter the storyboard. Cues must be ordered, nonoverlapping and end no later than the storyboard. The preview displays the optional caption track and the Python renderer captures the same Canvas frames. Automatically fitted captions are limited to two displayed lines; unusually long cues require manual editing and visual QA. Final render still needs the separate approval rules in AGENTS.md.
+
