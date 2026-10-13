@@ -79,9 +79,9 @@ def main():
               }
               s.profile='generic';s.captions=[];
               first.motion={tracks:{x:[{time:0,value:-.25},{time:2,value:.25}]}};
-              window.renderFrame(1);const withKeyframes=digest();
+              window.renderFrame(0.5);const withKeyframes=digest();
               if(oldMotion===undefined)delete first.motion;else first.motion=oldMotion;
-              window.renderFrame(1);const withoutKeyframes=digest();
+              window.renderFrame(0.5);const withoutKeyframes=digest();
               s.profile=oldProfile;s.captions=oldCaptions;
               return {withKeyframes,withoutKeyframes};
             }""")
