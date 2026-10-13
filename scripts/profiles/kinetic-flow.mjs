@@ -121,6 +121,9 @@ export function makePrompts(c,script,requestedDuration){
 export function cleanPlate(production,clip){
  const n=num(clip,1,production.prompts.length,'clip');
  const p=production.prompts[n-1];
- const base=p.prompt.replace(/SEQUENCE:.*? FINAL SECOND:/,'SEQUENCE: Keep each timed hero entrance and exact camera movement, but leave safe EMPTY TYPE ZONES with NO TEXT at all. FINAL SECOND:').replace(/TEXT RULES:.*? AVOID/,'TEXT RULES: ABSOLUTELY NO TEXT, letters, numbers, symbols or captions. AVOID');
+ const safeStyle=p.style.replace(/; top-centre [^.]*\./,'; top-centre strip completely empty and unmarked.');
+ const base=p.durationSeconds+'-second premium cinematic motion-graphics CLEAN PLATE in '+p.ratio+'. '+safeStyle+
+  ' SEQUENCE: Use the same original generic hero-object animation timing, clean studio light, layered soft shadows, smooth scene transitions and camera rhythm as the corresponding numbered clip, but leave EMPTY SPACES where headline text will later be added in the editor. All onscreen surfaces and objects are completely unlabelled. LAST SECOND: exit to the same neutral background for continuity.'+
+  ' TEXT RULES: ABSOLUTELY NO ON-SCREEN TEXT, WORDS, LETTERS, NUMBERS, SYMBOLS, LABELS, CAPTIONS, SUBTITLES, LOGOS, WATERMARKS OR BRAND WORDMARKS anywhere in the rendered footage. AUDIO: No voiceover or dialogue; no music.';
  return {clip:n,prompt:base,overlaySheet:p.beats.map((b,i)=>({order:i+1,words:b.words.join(' '),hero:b.hero,animation:'masked reveal and clean exit'})),note:'Add exact words in editor using the style lock; this fallback is only on the user’s explicit request.'};
 }
