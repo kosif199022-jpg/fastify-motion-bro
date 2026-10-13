@@ -1,3 +1,4 @@
+import {sampleMotionTracks} from './timeline.js';
 const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));const ease=t=>1-Math.pow(1-clamp(t,0,1),3);const PI=Math.PI;
 function roundRect(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r);}
 function splitArabic(text,maxChars=18){const words=String(text).split(/\s+/),out=[];let row='';for(const word of words){if((row+' '+word).trim().length>maxChars&&row){out.push(row);row=word;}else row=(row+' '+word).trim();}if(row)out.push(row);return out.slice(0,4);}
@@ -9,7 +10,10 @@ export function drawFrame(canvas,story,t){
  const grd=c.createLinearGradient(0,0,w,h);grd.addColorStop(0,i%2===0?'#0c1728':'#132337');grd.addColorStop(1,'#090d1d');c.fillStyle=grd;c.fillRect(0,0,w,h);
  // Time-dependent particles and vector geometry.
  for(let k=0;k<26;k++){let xx=(w*(k*.618%1)+Math.sin(phase+k)*15+w)%w;let yy=(h*(k*.381%1)+Math.cos(phase*.67+k)*20+h)%h;c.fillStyle='rgba(159,236,226,'+(.07+.08*(1+Math.sin(phase+k)))+')';c.beginPath();c.arc(xx,yy,1.2+(k%3),0,PI*2);c.fill();}
- c.save();c.translate(w*.5,h*.34);c.rotate(Math.sin(phase*.31)*.12);
+ // Optional scene-local keyframes are sampled from seconds, not render wall-clock time.
+ const keyed=sampleMotionTracks(scene,t-scene.start);
+ c.save();c.translate(w*(.5+keyed.x),h*(.34+keyed.y));
+ c.rotate(Math.sin(phase*.31)*.12+keyed.rotation);c.scale(keyed.scale,keyed.scale);
  for(let k=0;k<6;k++){const angle=phase*.5+k*PI/3,dist=w*(.15+.055*Math.sin(phase+k));c.strokeStyle=k%2?'#89d6ce':'#d5f375';c.globalAlpha=.24+.25*Math.sin(phase*.7+k)**2;c.lineWidth=Math.max(2,w*.007);c.beginPath();c.arc(Math.cos(angle)*dist,Math.sin(angle)*dist,Math.max(8,w*(.04+.016*Math.sin(phase+k))),angle,angle+PI*1.5);c.stroke();}
  c.globalAlpha=1;const r=w*(.12+.025*Math.sin(phase*1.25));c.fillStyle='#c9f96d';c.beginPath();c.arc(0,0,r,0,PI*2);c.fill();c.fillStyle='#0a1724';c.beginPath();c.arc(0,0,r*.58,0,PI*2);c.fill();c.restore();
  // Animated hand-drawn infographic waves.
