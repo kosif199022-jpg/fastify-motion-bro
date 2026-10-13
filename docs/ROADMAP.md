@@ -7,3 +7,5 @@ v0.5: 3D Three.js templates, hand-drawn strokes with real animation, feature-lev
 v0.6: Guided UI wizard, storyboard editor, voice waveform, frame snapshots and audio review.
 v1.0: Reliable production studio with multi-profile renders, Arabic QA, provenance, test and documentation.
 Never label a roadmap goal as built.
+
+- v0.2: Opt-in gated viral editorial idea→script→palette→poster prompts→motion prompts and native 2.5D preview; verify browser render separately. Photoreal 3D, image generation, synchronized SFX are not yet integrated.

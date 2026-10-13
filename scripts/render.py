@@ -21,6 +21,8 @@ def main():
     if not path.is_file(): p.error("Missing storyboard; run npm run plan")
     story=json.loads(path.read_text(encoding="utf-8"))
     duration=float(story.get("duration_seconds",0))
+    if story.get("profile") == "viral-editorial-3d" and args.approved and story.get("approval",{}).get("final_render") is not True:
+        p.error("Viral Editorial final render requires explicit user approval recorded in storyboard.json")
     if duration<0.1 or duration>600:p.error("invalid storyboard duration")
     if args.smoke: duration=min(duration,args.seconds or 2,3)
     elif args.seconds is not None: duration=min(duration,args.seconds)

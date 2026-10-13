@@ -33,3 +33,5 @@ python scripts/qa.py output/final.mp4
 ```
 
 **User asks for Motion Bro by name:** Start with a friendly Arabic one-round interview and offer a smart suggested style, not a huge technical checklist. See questions file.
+## Optional Viral Editorial 3D profile (v0.2)
+When user explicitly requests mixed-media viral editorial or provides the five-stage channel prompt, first read skills/viral-editorial/SKILL.md and docs/VIRAL-EDITORIAL-DNA.md. For THIS mode, do NOT use generic one-round interview: five strict user-gated stages (ideas → spoken narration → palette → poster prompts → motion prompts), never run ahead. Stage 5 silent/no music with SFX timing cues, exact 6-second scenes and two continuously drifting diagonal environmental background lines. Use npm run viral -- start to initiate; do not invent user approvals. Generic workflows remain unchanged.

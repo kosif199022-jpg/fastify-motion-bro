@@ -6,3 +6,5 @@
 - Higgsfield (external paid connection): AI-generated clips only after keys, license, terms and user permission are verified. The linked Higgsfield landing example is not a reusable SDK implementation.
 - Scroll-world / brag: scroll-scrub and product-launch creative directions, not installed runtimes.
 Choose based on availability and goals. Before switching a chosen engine, explain tradeoffs. No vendor code copied into this repository.
+
+- Opt-in Viral Editorial 3D: read docs/VIRAL-EDITORIAL-DNA.md. Native original 2.5D vector renderer under web/editorial.js. No attached photoreal model generator.
