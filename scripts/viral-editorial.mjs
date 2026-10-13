@@ -32,7 +32,7 @@ export const TOPICS = Object.freeze([
 function check(ok,msg){if(!ok)throw Error(msg);}
 const topic=s=>{check(Number.isInteger(s.selectedTopic)&&s.selectedTopic>=1&&s.selectedTopic<=5,'Select topic in Stage 1');return TOPICS[s.selectedTopic-1];};
 const palette=s=>{check(s.selectedPalette&&PALETTES[s.selectedPalette],'Lock palette in Stage 3');return PALETTES[s.selectedPalette];};
-export function newSession(){return {schema:'fmb.viral-editorial.v1',profile:PROFILE,stage:'IDEAS',selectedTopic:null,selectedPalette:null,approved:{script:false,palette:false,posters:false},target:{aspect:'9:16',width:1080,height:1920,fps:30},sound:{voiceover:false,music:false,sfx:'cues-only'}};}
+export function newSession(){return {schema:'fmb.viral-editorial.v1',profile:PROFILE,stage:'IDEAS',selectedTopic:null,selectedPalette:null,approved:{script:false,palette:false,posters:false},target:{aspect:'9:16',width:1080,height:1920,fps:30},sound:{voiceover:false,music:false,sfx:'cues-only'},finalRenderApproved:false};}
 export function advance(state,command){
  const s=structuredClone(state);check(s&&s.profile===PROFILE,'Invalid profile');
  const c=String(command).trim().toLowerCase();
@@ -43,6 +43,11 @@ export function advance(state,command){
  else if(s.stage==='MOTION'){check(c==='next','Type NEXT to conclude motion prompts');s.stage='DONE';}
  else throw Error('Session complete');
  return s;
+}
+export function approveFinalRender(state,confirmation){
+ check(state.stage==='DONE','All five stages must be completed before final render review');
+ check(String(confirmation).trim().toUpperCase()==='APPROVE FINAL RENDER','Explicit APPROVE FINAL RENDER confirmation required');
+ const s=structuredClone(state);s.finalRenderApproved=true;return s;
 }
 export function makePosters(s){
  const p=palette(s),t=topic(s);
@@ -81,7 +86,7 @@ export function compileStoryboard(state){
  const p=palette(state),t=topic(state),shots=makeMotionPrompts(state);
  return {version:1,profile:PROFILE,brief:{title:t.title,topic:t.title,style:PROFILE,aspect:'9:16',language:'en',voiceover:'none',music:'none',approved:false},
   duration_seconds:shots.length*SCENE_SECONDS,aspect:'9:16',fps:30,palette:p,exact_background_lines:2,
-  approval:{script:state.approved.script,palette:state.approved.palette,posters:state.approved.posters,final_render:false},
+  approval:{script:state.approved.script,palette:state.approved.palette,posters:state.approved.posters,final_render:state.finalRenderApproved===true},
   sound:state.sound,scenes:shots.map((x,i)=>({id:'editorial-'+String(i+1).padStart(2,'0'),start:i*6,end:(i+1)*6,title:x.typography,text:x.scriptLine,headline:x.typography,hero:x.hero,visual:'2.5D kinetic editorial collage',motionPrompt:x,sfx:x.sfx})),
   caveat:'Native Canvas renders original vector 2.5D heroes, not physical 3D models or actual 8K-generated posters. SFX descriptions are timing cues only.'};
 }

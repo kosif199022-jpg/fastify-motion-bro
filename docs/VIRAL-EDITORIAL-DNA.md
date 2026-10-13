@@ -43,3 +43,6 @@ Use npm run viral -- status at any time. Compile/export cannot bypass creative s
 - The editable vector renderer web/editorial.js is connected to web/player.js by storyboard.profile. It generates animation frame-by-frame via a time argument; no still frames stitched and called motion.
 - Native MP4 pipeline uses scripts/render.py and FFmpeg; no premium image/video engines are magically available without explicit API connections and asset rights.
 - The ordinary project pipeline is not overwritten until the user runs "preview-project".
+
+## Final render approval gate
+After the user reviews the browser preview and completes Stage 5, run npm run viral -- approve-render and have the user explicitly type APPROVE FINAL RENDER at the confirmation prompt. This sets storyboard.approval.final_render=true. The MP4 renderer refuses --approved for this profile unless that field is true. Earlier stage approvals do not count as final export permission.

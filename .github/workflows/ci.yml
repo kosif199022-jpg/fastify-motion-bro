@@ -11,3 +11,42 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
+  editorial-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install media dependencies
+        run: |
+          python -m pip install -r requirements-render.txt
+          python -m playwright install --with-deps chromium
+          ffmpeg -version
+      - name: Execute all five explicit workflow stages (test fixture only)
+        run: |
+          npm run viral -- start
+          npm run viral -- reply 2
+          npm run viral -- reply NEXT
+          npm run viral -- reply 1
+          npm run viral -- reply NEXT
+          npm run viral -- compile
+          npm run viral -- preview-project
+      - name: Ensure final render is still denied
+        run: |
+          python - <<'PY'
+          import json
+          b=json.load(open('project/storyboard.json',encoding='utf-8'))
+          assert b['profile']=='viral-editorial-3d'
+          assert b['duration_seconds']==30 and len(b['scenes'])==5
+          assert b['aspect']=='9:16' and b['exact_background_lines']==2
+          assert b['approval']['final_render'] is False
+          print('Editorial gates OK')
+          PY
+      - name: Render native animated smoke frame sequence
+        run: |
+          python scripts/render.py --smoke --seconds 1 --height 360 --fps 6 --output output/editorial-smoke.mp4
+          python scripts/qa.py output/editorial-smoke.mp4
