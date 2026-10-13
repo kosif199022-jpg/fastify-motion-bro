@@ -24,7 +24,7 @@ def main():
     if story.get("profile") == "viral-editorial-3d" and args.approved and story.get("approval",{}).get("final_render") is not True:
         p.error("Viral Editorial final render requires explicit user approval recorded in storyboard.json")
     if duration<0.1 or duration>600:p.error("invalid storyboard duration")
-    if args.smoke: duration=min(duration,args.seconds or 2,3)
+    if args.smoke: duration=min(duration,args.seconds or 2,12)
     elif args.seconds is not None: duration=min(duration,args.seconds)
     aspect=story.get("aspect","9:16")
     if aspect not in {"9:16","16:9","1:1"}:p.error("invalid aspect")
