@@ -1,0 +1,12 @@
+{
+  "name": "fastify-motion-bro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "intake": "node scripts/cli.mjs",
+    "plan": "node scripts/planner.mjs",
+    "preview": "node scripts/serve.mjs",
+    "test": "node --test tests/planner.test.mjs"
+  }
+}

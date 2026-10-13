@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "brief": {
+    "title": "Fastify Motion Bro",
+    "topic": "قصة الرسوم المتحركة والموشن",
+    "duration_seconds": 8,
+    "aspect": "9:16",
+    "style": "kinetic",
+    "language": "ar"
+  },
+  "duration_seconds": 8,
+  "aspect": "9:16",
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "scene-01",
+      "start": 0,
+      "end": 2.667,
+      "title": "افتتاحية",
+      "text": "قصة الرسوم المتحركة",
+      "visual": "kinetic-typography",
+      "motion": "Continuous vectors"
+    },
+    {
+      "id": "scene-02",
+      "start": 2.667,
+      "end": 5.333,
+      "title": "الفكرة",
+      "text": "التصميم يصبح حركة",
+      "visual": "infographic",
+      "motion": "Animated diagrams"
+    },
+    {
+      "id": "scene-03",
+      "start": 5.333,
+      "end": 8,
+      "title": "الخاتمة",
+      "text": "FASTIFY MOTION BRO",
+      "visual": "kinetic-typography",
+      "motion": "Moving rings"
+    }
+  ]
+}

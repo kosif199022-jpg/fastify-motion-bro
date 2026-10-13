@@ -1,0 +1,17 @@
+node_modules/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+output/
+cache/
+.analysis/
+.DS_Store
+assets/user/*
+!assets/user/.gitkeep
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.log

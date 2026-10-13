@@ -1,0 +1,11 @@
+# Render review checklist
+- Script complete and signed off
+- Target device 9:16/16:9/1:1 with safe margins
+- Each scene genuinely animates and connects to spoken words
+- Timed captions validated against recorded voice, when present
+- Colors/branding correct, Arabic shapes and diacritics legible
+- Preview viewed by user; explicit final render approval obtained
+- First/middle/last frames checked; no clipping, overflow or black bars
+- H.264 codec, MP4, correct size/fps/duration, audio, peak/loudness as requested
+- Licensing and third-party usage respected
+- Editable source + MP4 + real QA report delivered
